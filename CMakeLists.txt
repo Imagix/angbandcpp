@@ -1,5 +1,5 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.5...3.26 FATAL_ERROR)
-PROJECT(Angband LANGUAGES C)
+PROJECT(Angband LANGUAGES C CXX)
 SET(OUR_EXECUTABLE_NAME ${PROJECT_NAME})
 
 # Append the custom modules to the search path.
@@ -403,11 +403,12 @@ ADD_EXECUTABLE(OurExecutable
         $<$<BOOL:${SUPPORT_STATS_FRONTEND}>:src/main-stats.c>
         $<$<BOOL:${SUPPORT_STATS_FRONTEND}>:src/stats/db.c>
         $<$<BOOL:${SUPPORT_TEST_FRONTEND}>:src/main-test.c>
-        $<$<NOT:$<BOOL:${SUPPORT_WINDOWS_FRONTEND}>>:src/main.c>
+        $<$<NOT:$<BOOL:${SUPPORT_WINDOWS_FRONTEND}>>:src/main.cpp>
 )
 
 SET_TARGET_PROPERTIES(OurExecutable PROPERTIES
     C_STANDARD 99
+    CXX_STANDARD 20
     OUTPUT_NAME ${OUR_EXECUTABLE_NAME}
 )
 TARGET_INCLUDE_DIRECTORIES(OurExecutable PRIVATE

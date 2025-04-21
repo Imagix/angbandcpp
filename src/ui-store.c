@@ -165,7 +165,7 @@ static void prt_welcome(const struct owner *proprietor)
 
 		/* Get a title for the character */
 		if ((i % 2) && randint0(2))
-			player_name = player->class->title[(player->lev - 1) / 5];
+			player_name = player->playerClass->title[(player->lev - 1) / 5];
 		else if (randint0(2))
 			player_name = player->full_name;
 		else

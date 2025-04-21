@@ -507,7 +507,7 @@ struct player_upkeep {
  */
 struct player {
 	const struct player_race *race;
-	const struct player_class *class;
+	const struct player_class *playerClass;
 
 	struct loc grid;	/* Player location */
 	struct loc old_grid;/* Player location before leaving for an arena */

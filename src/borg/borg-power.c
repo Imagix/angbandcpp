@@ -1099,10 +1099,10 @@ static int32_t borg_power_equipment(void)
     cur_wgt += borg_item_weight(&borg_items[INVEN_FEET]);
 
     /* Determine the weight allowance */
-    max_wgt = player->class->magic.spell_weight;
+    max_wgt = player->playerClass->magic.spell_weight;
 
     /* Hack -- heavy armor hurts magic */
-    if (player->class->magic.total_spells && ((cur_wgt - max_wgt) / 10) > 0) {
+    if (player->playerClass->magic.total_spells && ((cur_wgt - max_wgt) / 10) > 0) {
         /* max sp must be calculated in case it changed with the armor */
         int max_sp = borg.trait[BI_SP_ADJ] / 100 + 1;
         max_sp -= ((cur_wgt - max_wgt) / 10);
@@ -1778,7 +1778,7 @@ static int32_t borg_power_inventory(void)
             continue;
 
         /* The "hard" books */
-        if (player->class->magic.books[book].dungeon) {
+        if (player->playerClass->magic.books[book].dungeon) {
             int what;
 
             /* Scan the spells */

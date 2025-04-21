@@ -72,7 +72,7 @@ void borg_log_death(void)
     file_put(borg_log_file, buf);
 
     file_putf(borg_log_file, "%s the %s %s, Level %d/%d\n", player->full_name,
-        player->race->name, player->class->name, player->lev, player->max_lev);
+        player->race->name, player->playerClass->name, player->lev, player->max_lev);
 
     file_putf(borg_log_file, "Exp: %lu  Gold: %lu  Turn: %lu\n",
         (long)player->max_exp + (100 * player->max_depth), (long)player->au,
@@ -113,7 +113,7 @@ void borg_log_death_data(void)
 
     /* dump stuff for easy import to database */
     file_putf(borg_log_file, "%s, %s, %s, %d, %d, %s\n", borg_engine_date,
-        player->race->name, player->class->name, player->lev, player->depth,
+        player->race->name, player->playerClass->name, player->lev, player->depth,
         player->died_from);
 
     file_close(borg_log_file);
@@ -200,7 +200,7 @@ void borg_write_map(bool ask)
         borg_map_file = file_open(buf2, MODE_WRITE, FTYPE_TEXT);
 
     file_putf(borg_map_file, "%s the %s %s, Level %d/%d\n", player->full_name,
-        player->race->name, player->class->name, player->lev, player->max_lev);
+        player->race->name, player->playerClass->name, player->lev, player->max_lev);
 
     file_putf(borg_map_file, "Exp: %lu  Gold: %lu  Turn: %lu\n",
         (long)(player->max_exp + (100 * player->max_depth)), (long)player->au,
@@ -484,7 +484,7 @@ void borg_write_map(bool ask)
         file_putf(borg_map_file, "\n\n   [ Spells ] \n\n");
         file_putf(
             borg_map_file, "Name                           Legal Times cast\n");
-        for (i = 0; i < player->class->magic.total_spells; i++) {
+        for (i = 0; i < player->playerClass->magic.total_spells; i++) {
             borg_magic *as          = &borg_magics[i];
             int         failpercent = 0;
 

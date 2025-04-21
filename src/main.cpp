@@ -16,6 +16,7 @@
  *    are included in all such copies.  Other copyrights may also apply.
  */
 
+extern "C" {
 #include "angband.h"
 #include "init.h"
 #include "savefile.h"
@@ -57,6 +58,7 @@
 #ifdef USE_SDL2
 #include "SDL_main.h"
 #endif
+}
 
 /**
  * List of the available modules in the order they are tried.

@@ -183,7 +183,7 @@ static int fmt_title(char buf[], int max, bool short_mode)
 		my_strcpy(buf, player->shape->name, max);
 		my_strcap(buf);		
 	} else if (!short_mode) {
-		my_strcpy(buf, player->class->title[(player->lev - 1) / 5], max);
+		my_strcpy(buf, player->playerClass->title[(player->lev - 1) / 5], max);
 	}
 
 	return strlen(buf);
@@ -335,13 +335,13 @@ static void prt_sp(int row, int col)
 	uint8_t color = player_sp_attr(player);
 
 	/* Do not show mana unless we should have some */
-	if (!player->class->magic.total_spells
-			|| (player->lev < player->class->magic.spell_first)) {
+	if (!player->playerClass->magic.total_spells
+			|| (player->lev < player->playerClass->magic.spell_first)) {
 		/*
 		 * But clear if experience drain may have left no points after
 		 * having points.
 		 */
-		if (player->class->magic.total_spells
+		if (player->playerClass->magic.total_spells
 				&& player->exp < player->max_exp) {
 			put_str("            ", row, col);
 		}
@@ -566,7 +566,7 @@ static int prt_race_class_short(int row, int col)
 
 	strnfmt(buf, sizeof(buf), "%s %s",
 		player->race->name,
-		player->class->title[(player->lev - 1) / 5]);
+		player->playerClass->title[(player->lev - 1) / 5]);
 
 	c_put_str(COLOUR_L_GREEN, buf, row, col);
 
@@ -577,7 +577,7 @@ static void prt_class(int row, int col) {
 	if (player_is_shapechanged(player)) {
 		prt_field("", row, col);
 	} else {
-		prt_field(player->class->name, row, col);
+		prt_field(player->playerClass->name, row, col);
 	}
 }
 
@@ -700,8 +700,8 @@ static int prt_sp_short(int row, int col)
 	uint8_t color = player_sp_attr(player);
 
 	/* Do not show mana unless we should have some */
-	if (!player->class->magic.total_spells
-			|| (player->lev < player->class->magic.spell_first))
+	if (!player->playerClass->magic.total_spells
+			|| (player->lev < player->playerClass->magic.spell_first))
 		return 0;
 
 	put_str("SP:", row, col);
@@ -2038,7 +2038,7 @@ static void update_topbar_subwindow(game_event_type type,
 	term *inv_term = user;
 
 	/* Check sanity */
-	if (!(player && player->race && player->class && cave)) return;
+	if (!(player && player->race && player->playerClass && cave)) return;
 
 	/* Activate */
 	Term_activate(inv_term);
@@ -2071,7 +2071,7 @@ static void update_player_compact_subwindow(game_event_type type,
 
 	/* Race and Class */
 	prt_field(player->race->name, row++, col);
-	prt_field(player->class->name, row++, col);
+	prt_field(player->playerClass->name, row++, col);
 
 	/* Title */
 	prt_title(row++, col);

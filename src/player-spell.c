@@ -138,7 +138,7 @@ static const int adj_mag_stat[STAT_RANGE] =
  */
 void player_spells_init(struct player *p)
 {
-	int i, num_spells = p->class->magic.total_spells;
+	int i, num_spells = p->playerClass->magic.total_spells;
 
 	/* None */
 	if (!num_spells) return;
@@ -239,10 +239,10 @@ const struct class_book *player_object_to_book(const struct player *p,
 {
 	int i;
 
-	for (i = 0; i < p->class->magic.num_books; i++)
-		if ((obj->tval == p->class->magic.books[i].tval) &&
-			(obj->sval == p->class->magic.books[i].sval))
-			return &p->class->magic.books[i];
+	for (i = 0; i < p->playerClass->magic.num_books; i++)
+		if ((obj->tval == p->playerClass->magic.books[i].tval) &&
+			(obj->sval == p->playerClass->magic.books[i].sval))
+			return &p->playerClass->magic.books[i];
 
 	return NULL;
 }
@@ -250,7 +250,7 @@ const struct class_book *player_object_to_book(const struct player *p,
 const struct class_spell *spell_by_index(const struct player *p, int index)
 {
 	int book = 0, count = 0;
-	const struct class_magic *magic = &p->class->magic;
+	const struct class_magic *magic = &p->playerClass->magic;
 
 	/* Check index validity */
 	if (index < 0 || index >= magic->total_spells)
@@ -386,7 +386,7 @@ int16_t spell_chance(int spell_index)
 	const struct class_spell *spell;
 
 	/* Paranoia -- must be literate */
-	if (!player->class->magic.total_spells) return chance;
+	if (!player->playerClass->magic.total_spells) return chance;
 
 	/* Get the spell */
 	spell = spell_by_index(player, spell_index);
@@ -461,7 +461,7 @@ void spell_learn(int spell_index)
 	player->spell_flags[spell_index] |= PY_SPELL_LEARNED;
 
 	/* Find the next open entry in "spell_order[]" */
-	for (i = 0; i < player->class->magic.total_spells; i++)
+	for (i = 0; i < player->playerClass->magic.total_spells; i++)
 		if (player->spell_order[i] == 99) break;
 
 	/* Add the spell to the known list */

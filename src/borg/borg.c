@@ -1945,7 +1945,7 @@ void do_cmd_borg(void)
 
             int i;
 
-            for (i = 0; i < player->class->magic.total_spells; i++) {
+            for (i = 0; i < player->playerClass->magic.total_spells; i++) {
                 /* Clear the screen */
                 Term_clear();
 

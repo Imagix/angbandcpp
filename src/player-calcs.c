@@ -1247,7 +1247,7 @@ void calc_inventory(struct player *p)
 static int average_spell_stat(struct player *p, struct player_state *state)
 {
 	int i, count, sum = 0;
-	struct magic_realm *realm = class_magic_realms(p->class, &count), *r_next;
+	struct magic_realm *realm = class_magic_realms(p->playerClass, &count), *r_next;
 
 	for (i = count; i > 0; i--) {
 		sum += state->stat_ind[realm->stat];
@@ -1268,7 +1268,7 @@ static int average_spell_stat(struct player *p, struct player_state *state)
 static void calc_spells(struct player *p)
 {
 	int i, j, k, levels;
-	int num_allowed, num_known, num_total = p->class->magic.total_spells;
+	int num_allowed, num_known, num_total = p->playerClass->magic.total_spells;
 	int percent_spells;
 
 	const struct class_spell *spell;
@@ -1276,7 +1276,7 @@ static void calc_spells(struct player *p)
 	int16_t old_spells;
 
 	/* Hack -- must be literate */
-	if (!p->class->magic.total_spells) return;
+	if (!p->playerClass->magic.total_spells) return;
 
 	/* Hack -- wait for creation */
 	if (!character_generated) return;
@@ -1288,7 +1288,7 @@ static void calc_spells(struct player *p)
 	old_spells = p->upkeep->new_spells;
 
 	/* Determine the number of spells allowed */
-	levels = p->lev - p->class->magic.spell_first + 1;
+	levels = p->lev - p->playerClass->magic.spell_first + 1;
 
 	/* Hack -- no negative spells */
 	if (levels < 0) levels = 0;
@@ -1434,7 +1434,7 @@ static void calc_spells(struct player *p)
 		/* Message if needed */
 		if (p->upkeep->new_spells) {
 			int count;
-			struct magic_realm *r = class_magic_realms(p->class, &count), *r1;
+			struct magic_realm *r = class_magic_realms(p->playerClass, &count), *r1;
 			char buf[120];
 
 			my_strcpy(buf, r->spell_noun, sizeof(buf));
@@ -1482,7 +1482,7 @@ static void calc_mana(struct player *p, struct player_state *state, bool update)
 	int i, msp, levels, cur_wgt, max_wgt; 
 
 	/* Must be literate */
-	if (!p->class->magic.total_spells) {
+	if (!p->playerClass->magic.total_spells) {
 		p->msp = 0;
 		p->csp = 0;
 		p->csp_frac = 0;
@@ -1490,7 +1490,7 @@ static void calc_mana(struct player *p, struct player_state *state, bool update)
 	}
 
 	/* Extract "effective" player level */
-	levels = (p->lev - p->class->magic.spell_first) + 1;
+	levels = (p->lev - p->playerClass->magic.spell_first) + 1;
 	if (levels > 0) {
 		msp = 1;
 		msp += adj_mag_mana[average_spell_stat(p, state)] * levels / 100;
@@ -1520,7 +1520,7 @@ static void calc_mana(struct player *p, struct player_state *state, bool update)
 	}
 
 	/* Determine the weight allowance */
-	max_wgt = p->class->magic.spell_weight;
+	max_wgt = p->playerClass->magic.spell_weight;
 
 	/* Heavy armor penalizes mana */
 	if (((cur_wgt - max_wgt) / 10) > 0) {
@@ -1708,14 +1708,14 @@ int calc_blows(struct player *p, const struct object *obj,
 	int blow_energy;
 
 	int weight = (obj == NULL) ? 0 : object_weight_one(obj);
-	int min_weight = p->class->min_weight;
+	int min_weight = p->playerClass->min_weight;
 
 	/* Enforce a minimum "weight" (tenth pounds) */
 	div = (weight < min_weight) ? min_weight : weight;
 
 	/* Get the strength vs weight */
 	str_index = adj_str_blow[state->stat_ind[STAT_STR]] *
-			p->class->att_multiply / div;
+			p->playerClass->att_multiply / div;
 
 	/* Maximal value */
 	if (str_index > 11) str_index = 11;
@@ -1726,7 +1726,7 @@ int calc_blows(struct player *p, const struct object *obj,
 	/* Use the blows table to get energy per blow */
 	blow_energy = blows_table[str_index][dex_index];
 
-	blows = MIN((10000 / blow_energy), (100 * p->class->max_attacks));
+	blows = MIN((10000 / blow_energy), (100 * p->playerClass->max_attacks));
 
 	/* Require at least one blow, two for O-combat */
 	return MAX(blows + (100 * extra_blows),
@@ -1901,7 +1901,7 @@ void calc_bonuses(struct player *p, struct player_state *state, bool known_only,
 	/* Extract race/class info */
 	state->see_infra = p->race->infra;
 	for (i = 0; i < SKILL_MAX; i++) {
-		state->skills[i] = p->race->r_skills[i]	+ p->class->c_skills[i];
+		state->skills[i] = p->race->r_skills[i]	+ p->playerClass->c_skills[i];
 	}
 	for (i = 0; i < ELEM_MAX; i++) {
 		vuln[i] = false;
@@ -1915,7 +1915,7 @@ void calc_bonuses(struct player *p, struct player_state *state, bool known_only,
 	/* Base pflags */
 	pf_wipe(state->pflags);
 	pf_copy(state->pflags, p->race->pflags);
-	pf_union(state->pflags, p->class->pflags);
+	pf_union(state->pflags, p->playerClass->pflags);
 
 	/* Extract the player flags */
 	player_flags(p, collect_f);
@@ -2055,7 +2055,7 @@ void calc_bonuses(struct player *p, struct player_state *state, bool known_only,
 		int add, use, ind;
 
 		add = state->stat_add[i];
-		add += (p->race->r_adj[i] + p->class->c_adj[i]);
+		add += (p->race->r_adj[i] + p->playerClass->c_adj[i]);
 		state->stat_top[i] =  modify_stat_value(p->stat_max[i], add);
 		use = modify_stat_value(p->stat_cur[i], add);
 
@@ -2242,7 +2242,7 @@ void calc_bonuses(struct player *p, struct player_state *state, bool known_only,
 	state->skills[SKILL_SAVE] += adj_wis_sav[state->stat_ind[STAT_WIS]];
 	state->skills[SKILL_DIGGING] += adj_str_dig[state->stat_ind[STAT_STR]];
 	for (i = 0; i < SKILL_MAX; i++)
-		state->skills[i] += (p->class->x_skills[i] * p->lev / 10);
+		state->skills[i] += (p->playerClass->x_skills[i] * p->lev / 10);
 
 	if (state->skills[SKILL_DIGGING] < 1) state->skills[SKILL_DIGGING] = 1;
 	if (state->skills[SKILL_STEALTH] > 30) state->skills[SKILL_STEALTH] = 30;
@@ -2594,7 +2594,7 @@ void update_stuff(struct player *p)
 
 	if (p->upkeep->update & (PU_SPELLS)) {
 		p->upkeep->update &= ~(PU_SPELLS);
-		if (p->class->magic.total_spells > 0) {
+		if (p->playerClass->magic.total_spells > 0) {
 			calc_spells(p);
 		}
 	}
