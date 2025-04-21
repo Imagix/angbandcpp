@@ -67,7 +67,7 @@ static void view_abilities(void)
 
 	/* Count the number of class powers we have */
 	for (ability = player_abilities; ability; ability = ability->next) {
-		if (class_has_ability(player->class, ability)) {
+		if (class_has_ability(player->playerClass, ability)) {
 			memcpy(&ability_list[num_abilities], ability,
 				   sizeof(struct player_ability));
 			ability_list[num_abilities++].group = PLAYER_FLAG_CLASS;

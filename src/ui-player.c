@@ -487,7 +487,7 @@ void display_player_stat_info(void)
 		c_put_str(COLOUR_L_BLUE, buf, row+i, col+12);
 
 		/* Class Bonus */
-		strnfmt(buf, sizeof(buf), "%+3d", player->class->c_adj[i]);
+		strnfmt(buf, sizeof(buf), "%+3d", player->playerClass->c_adj[i]);
 		c_put_str(COLOUR_L_BLUE, buf, row+i, col+16);
 
 		/* Equipment Bonus */
@@ -628,7 +628,7 @@ static const char *show_title(void)
 	else if (player->total_winner || player->lev > PY_MAX_LEVEL)
 		return "***WINNER***";
 	else
-		return player->class->title[(player->lev - 1) / 5];
+		return player->playerClass->title[(player->lev - 1) / 5];
 }
 
 static const char *show_adv_exp(void)
@@ -694,7 +694,7 @@ static struct panel *get_panel_topleft(void) {
 
 	panel_line(p, COLOUR_L_BLUE, "Name", "%s", player->full_name);
 	panel_line(p, COLOUR_L_BLUE, "Race",	"%s", player->race->name);
-	panel_line(p, COLOUR_L_BLUE, "Class", "%s", player->class->name);
+	panel_line(p, COLOUR_L_BLUE, "Class", "%s", player->playerClass->name);
 	panel_line(p, COLOUR_L_BLUE, "Title", "%s", show_title());
 	panel_line(p, COLOUR_L_BLUE, "HP", "%d/%d", player->chp, player->mhp);
 	panel_line(p, COLOUR_L_BLUE, "SP", "%d/%d", player->csp, player->msp);

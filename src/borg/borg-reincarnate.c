@@ -307,7 +307,7 @@ static void borg_outfit_player(struct player *p)
     }
 
     /* Give the player starting equipment */
-    for (si = p->class->start_items; si; si = si->next) {
+    for (si = p->playerClass->start_items; si; si = si->next) {
         int                 num  = rand_range(si->min, si->max);
         struct object_kind *kind = lookup_kind(si->tval, si->sval);
         assert(kind);

@@ -90,7 +90,7 @@ bool borg_play_magic(bool bored)
     int spell_num, b_spell_num;
 
     /* Hack -- must use magic or prayers */
-    if (!player->class->magic.total_spells)
+    if (!player->playerClass->magic.total_spells)
         return false;
 
     /* Hack -- blind/confused */
@@ -104,7 +104,7 @@ bool borg_play_magic(bool bored)
         return false;
 
     /* loop through spells backward */
-    for (spell_num = player->class->magic.total_spells - 1; spell_num >= 0;
+    for (spell_num = player->playerClass->magic.total_spells - 1; spell_num >= 0;
          spell_num--) {
         borg_magic *as = &borg_magics[spell_num];
 
@@ -168,7 +168,7 @@ bool borg_play_magic(bool bored)
         return false;
 
     /* Check each spell (backwards) */
-    for (spell_num = player->class->magic.total_spells - 1; spell_num >= 0;
+    for (spell_num = player->playerClass->magic.total_spells - 1; spell_num >= 0;
          spell_num--) {
         borg_magic *as = &borg_magics[spell_num];
 

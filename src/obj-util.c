@@ -760,8 +760,8 @@ bool obj_kind_can_browse(const struct object_kind *kind)
 {
 	int i;
 
-	for (i = 0; i < player->class->magic.num_books; i++) {
-		struct class_book book = player->class->magic.books[i];
+	for (i = 0; i < player->playerClass->magic.num_books; i++) {
+		struct class_book book = player->playerClass->magic.books[i];
 		if (kind->tval == book.tval && kind->sval == book.sval)
 			return true;
 	}

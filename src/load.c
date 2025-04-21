@@ -697,12 +697,12 @@ int rd_player(void)
 	rd_string(buf, sizeof(buf));
 	for (c = classes; c; c = c->next) {
 		if (streq(c->name, buf)) {
-			player->class = c;
+			player->playerClass = c;
 			break;
 		}
 	}
 
-	if (!player->class) {
+	if (!player->playerClass) {
 		note(format("Invalid player class (%s).", buf));
 		return -1;
 	}
@@ -1093,7 +1093,7 @@ int rd_player_spells(void)
 	
 	/* Read the number of spells */
 	rd_u16b(&tmp16u);
-	if (tmp16u > player->class->magic.total_spells) {
+	if (tmp16u > player->playerClass->magic.total_spells) {
 		note(format("Too many player spells (%d).", tmp16u));
 		return (-1);
 	}

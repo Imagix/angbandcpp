@@ -568,7 +568,7 @@ static void setup_menus(void)
 	for (c = classes; c; c = c->next) n++;
 
 	/* Class menu similar to race. */
-	init_birth_menu(&class_menu, n, player->class ? player->class->cidx : 0,
+	init_birth_menu(&class_menu, n, player->playerClass ? player->playerClass->cidx : 0,
 	                &class_region, true, class_help);
 	mdata = class_menu.menu_data;
 

@@ -133,8 +133,8 @@ static borg_spell_rating borg_spell_ratings_PRIEST[] =
     { "Banish Evil", 85, BANISH_EVIL },
     { "Word of Destruction", 75, WORD_OF_DESTRUCTION },
     { "Holy Word", 85, HOLY_WORD },
-    { "Spear of Orom\xC3\xab", 85, SPEAR_OF_OROME }, /* "Spear of Oromë" */
-    { "Light of Manw\xC3\xab", 85, LIGHT_OF_MANWE } /* "Light of Manwë"*/
+    { "Spear of Orom\xC3\xab", 85, SPEAR_OF_OROME }, /* "Spear of Oromï¿½" */
+    { "Light of Manw\xC3\xab", 85, LIGHT_OF_MANWE } /* "Light of Manwï¿½"*/
 };
 static borg_spell_rating borg_spell_ratings_NECROMANCER[] =
 {
@@ -238,7 +238,7 @@ static borg_spell_rating borg_spell_ratings_BLACKGUARD[] =
 int borg_spell_stat(void)
 {
     if (borg_can_cast()) {
-        struct class_spell *spell = &(player->class->magic.books[0].spells[0]);
+        struct class_spell *spell = &(player->playerClass->magic.books[0].spells[0]);
         if (spell != NULL) {
             return spell->realm->stat;
         }
@@ -252,7 +252,7 @@ int borg_spell_stat(void)
  */
 bool borg_can_cast(void)
 {
-    return player->class->magic.total_spells != 0;
+    return player->playerClass->magic.total_spells != 0;
 }
 
 /*
@@ -262,7 +262,7 @@ bool borg_can_cast(void)
  */
 bool borg_primarily_caster(void)
 {
-    return player->class->magic.num_books > 3;
+    return player->playerClass->magic.num_books > 3;
 }
 
 /*
@@ -285,9 +285,9 @@ int borg_get_book_num(int sval)
     if (!borg_can_cast())
         return -1;
 
-    for (int book_num = 0; book_num < player->class->magic.num_books;
+    for (int book_num = 0; book_num < player->playerClass->magic.num_books;
          book_num++) {
-        if (player->class->magic.books[book_num].sval == sval)
+        if (player->playerClass->magic.books[book_num].sval == sval)
             return book_num;
     }
     return -1;
@@ -310,8 +310,8 @@ bool borg_is_dungeon_book(int tval, int sval)
     }
 
     /* keep track of if this is a book from the dungeon */
-    for (int i = 0; i < player->class->magic.num_books; i++) {
-        struct class_book book = player->class->magic.books[i];
+    for (int i = 0; i < player->playerClass->magic.num_books; i++) {
+        struct class_book book = player->playerClass->magic.books[i];
         if (tval == book.tval && sval == book.sval && book.dungeon)
             return true;
     }
@@ -326,7 +326,7 @@ borg_magic *borg_get_spell_entry(int book, int entry)
 {
     int entry_in_book = 0;
 
-    for (int spell_num = 0; spell_num < player->class->magic.total_spells;
+    for (int spell_num = 0; spell_num < player->playerClass->magic.total_spells;
          spell_num++) {
         if (borg_magics[spell_num].book == book) {
             if (entry_in_book == entry)
@@ -346,7 +346,7 @@ static int borg_get_spell_number(const enum borg_spells spell)
     if (borg_magics == NULL)
         return -1;
 
-    int total_spells = player->class->magic.total_spells;
+    int total_spells = player->playerClass->magic.total_spells;
     for (int spell_num = 0; spell_num < total_spells; spell_num++) {
         if (borg_magics[spell_num].spell_enum == spell)
             return spell_num;
@@ -632,7 +632,7 @@ bool borg_spell(const enum borg_spells spell)
  */
 static void borg_cheat_spell(int book_num)
 {
-    struct class_book *book = &player->class->magic.books[book_num];
+    struct class_book *book = &player->playerClass->magic.books[book_num];
     for (int spell_num = 0; spell_num < book->num_spells; spell_num++) {
         struct class_spell *cspell = &book->spells[spell_num];
         borg_magic *as = &borg_magics[cspell->sidx];
@@ -685,9 +685,9 @@ void borg_cheat_spells(void)
         int        book_num;
         borg_item *item = &borg_items[i];
 
-        for (book_num = 0; book_num < player->class->magic.num_books;
+        for (book_num = 0; book_num < player->playerClass->magic.num_books;
             book_num++) {
-            struct class_book book = player->class->magic.books[book_num];
+            struct class_book book = player->playerClass->magic.books[book_num];
             if (item->tval == book.tval && item->sval == book.sval) {
                 /* Note book locations */
                 borg.book_idx[book_num] = i;
@@ -722,7 +722,7 @@ void borg_cheat_spells(void)
 static int borg_get_book_offset(int index)
 {
     int                       book = 0, count = 0;
-    const struct class_magic *magic = &player->class->magic;
+    const struct class_magic *magic = &player->playerClass->magic;
 
     /* Check index validity */
     if (index < 0 || index >= magic->total_spells)
@@ -768,7 +768,7 @@ static void borg_init_spell(borg_magic *spells, int spell_num)
  */
 void borg_prepare_book_info(void)
 {
-    switch (player->class->cidx) {
+    switch (player->playerClass->cidx) {
     case CLASS_MAGE:
         borg_spell_ratings = borg_spell_ratings_MAGE;
         break;
@@ -802,9 +802,9 @@ void borg_prepare_book_info(void)
         mem_free(borg_magics);
 
     borg_magics
-        = mem_zalloc(player->class->magic.total_spells * sizeof(borg_magic));
+        = mem_zalloc(player->playerClass->magic.total_spells * sizeof(borg_magic));
 
-    for (int spell = 0; spell < player->class->magic.total_spells; spell++) {
+    for (int spell = 0; spell < player->playerClass->magic.total_spells; spell++) {
         borg_init_spell(borg_magics, spell);
     }
 }

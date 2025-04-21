@@ -59,7 +59,7 @@ void wr_description(void)
 				player->full_name,
 				player->lev,
 				player->race->name,
-				player->class->name,
+				player->playerClass->name,
 				player->depth);
 
 	wr_string(buf);
@@ -428,7 +428,7 @@ void wr_player(void)
 	/* Race/Class/Gender/Spells */
 	wr_string(player->race->name);
 	wr_string(player->shape->name);
-	wr_string(player->class->name);
+	wr_string(player->playerClass->name);
 	wr_byte(player->opts.name_suffix);
 
 	wr_byte(player->hitdie);
@@ -703,12 +703,12 @@ void wr_player_spells(void)
 {
 	int i;
 
-	wr_u16b(player->class->magic.total_spells);
+	wr_u16b(player->playerClass->magic.total_spells);
 
-	for (i = 0; i < player->class->magic.total_spells; i++)
+	for (i = 0; i < player->playerClass->magic.total_spells; i++)
 		wr_byte(player->spell_flags[i]);
 
-	for (i = 0; i < player->class->magic.total_spells; i++)
+	for (i = 0; i < player->playerClass->magic.total_spells; i++)
 		wr_byte(player->spell_order[i]);
 }
 

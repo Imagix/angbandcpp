@@ -1045,14 +1045,14 @@ int borg_calc_blows(borg_item *item)
     int blow_energy;
 
     int weight     = item->weight * item->iqty;
-    int min_weight = player->class->min_weight;
+    int min_weight = player->playerClass->min_weight;
 
     /* Enforce a minimum "weight" (tenth pounds) */
     div = (weight < min_weight) ? min_weight : weight;
 
     /* Get the strength vs weight */
     str_index = adj_str_blow[borg.trait[BI_STR_INDEX]]
-                * player->class->att_multiply / div;
+                * player->playerClass->att_multiply / div;
 
     /* Maximal value */
     if (str_index > 11)
@@ -1064,7 +1064,7 @@ int borg_calc_blows(borg_item *item)
     /* Use the blows table to get energy per blow */
     blow_energy = borg_blows_table[str_index][dex_index];
 
-    blows = MIN((10000 / blow_energy), (100 * player->class->max_attacks));
+    blows = MIN((10000 / blow_energy), (100 * player->playerClass->max_attacks));
 
     /* Require at least one blow, two for O-combat */
     return (MAX(blows
@@ -1234,7 +1234,7 @@ static void borg_notice_equipment(void)
 {
     int                        i, hold;
     const struct player_race  *rb_ptr = player->race;
-    const struct player_class *cb_ptr = player->class;
+    const struct player_class *cb_ptr = player->playerClass;
 
     int extra_shots                   = 0;
     int extra_might                   = 0;
@@ -1803,7 +1803,7 @@ static void borg_notice_equipment(void)
         add = borg.trait[BI_ASTR + i];
 
         /* Modify the stats for race/class */
-        add += (player->race->r_adj[i] + player->class->c_adj[i]);
+        add += (player->race->r_adj[i] + player->playerClass->c_adj[i]);
 
         /* Extract the new "use_stat" value for the stat */
         use = modify_stat_value(stat_cur[i], add);
@@ -1838,7 +1838,7 @@ static void borg_notice_equipment(void)
     if (spell_stat >= 0) {
         borg.trait[BI_SP_ADJ]
             = ((borg_adj_mag_mana[borg.trait[BI_STR_INDEX + spell_stat]]
-                   * (borg.trait[BI_CLEVEL] - player->class->magic.spell_first
+                   * (borg.trait[BI_CLEVEL] - player->playerClass->magic.spell_first
                        + 1))
                 / 2);
         borg.trait[BI_FAIL1] = 
@@ -2957,7 +2957,7 @@ void borg_notice_player(void)
     int i;
 
     /*** Hack -- Extract class ***/
-    borg.trait[BI_CLASS] = player->class->cidx;
+    borg.trait[BI_CLASS] = player->playerClass->cidx;
 
     /* Assume level is fine */
     borg.trait[BI_ISFIXLEV] = false;

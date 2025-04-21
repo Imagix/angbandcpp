@@ -38,7 +38,7 @@ static int test_generate0(void *state) {
 	player_generate(p, &test_race, &test_class, false);
 	eq(p->lev, 1);
 	ptreq(p->race, &test_race);
-	ptreq(p->class, &test_class);
+	ptreq(p->playerClass, &test_class);
 	ok;
 }
 

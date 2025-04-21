@@ -1085,7 +1085,7 @@ bool player_is_trapsafe(const struct player *p)
  */
 bool player_can_cast(const struct player *p, bool show_msg)
 {
-	if (!p->class->magic.total_spells) {
+	if (!p->playerClass->magic.total_spells) {
 		if (show_msg) {
 			msg("You cannot pray or produce magics.");
 		}
@@ -1124,7 +1124,7 @@ bool player_can_study(const struct player *p, bool show_msg)
 	if (!p->upkeep->new_spells) {
 		if (show_msg) {
 			int count;
-			struct magic_realm *r = class_magic_realms(p->class, &count), *r1;
+			struct magic_realm *r = class_magic_realms(p->playerClass, &count), *r1;
 			char buf[120];
 
 			my_strcpy(buf, r->spell_noun, sizeof(buf));

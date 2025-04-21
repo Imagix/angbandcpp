@@ -149,7 +149,7 @@ static void save_roller_data(birther *tosave)
 
 	/* Save the data */
 	tosave->race = player->race;
-	tosave->class = player->class;
+	tosave->class = player->playerClass;
 	tosave->age = player->age;
 	tosave->wt = player->wt_birth;
 	tosave->ht = player->ht_birth;
@@ -192,7 +192,7 @@ static void load_roller_data(birther *saved, birther *prev_player)
 
 	/* Load previous data */
 	player->race     = saved->race;
-	player->class    = saved->class;
+	player->playerClass    = saved->class;
 	player->age      = saved->age;
 	player->wt       = player->wt_birth = saved->wt;
 	player->ht       = player->ht_birth = saved->ht;
@@ -260,7 +260,7 @@ static void get_stats(int stat_use[STAT_MAX])
 		player->stat_max[i] = j;
 
 		/* Obtain a "bonus" for "race" and "class" */
-		bonus = player->race->r_adj[i] + player->class->c_adj[i];
+		bonus = player->race->r_adj[i] + player->playerClass->c_adj[i];
 
 		/* Start fully healed */
 		player->stat_cur[i] = player->stat_max[i];
@@ -450,7 +450,7 @@ void player_init(struct player *p)
 
 	/* Default to the first race/class in the edit file */
 	p->race = races;
-	p->class = classes;
+	p->playerClass = classes;
 
 	/* Player starts unshapechanged */
 	p->shape = lookup_player_shape("normal");
@@ -603,7 +603,7 @@ static void player_outfit(struct player *p)
 	}
 
 	/* Give the player starting equipment */
-	for (si = p->class->start_items; si; si = si->next) {
+	for (si = p->playerClass->start_items; si; si = si->next) {
 		int num = rand_range(si->min, si->max);
 		struct object_kind *kind = lookup_kind(si->tval, si->sval);
 		assert(kind);
@@ -819,10 +819,10 @@ static void generate_stats(int st[STAT_MAX], int spent[STAT_MAX],
 	int step = 0;
 	bool maxed[STAT_MAX] = { 0 };
 	/* Hack - for now, just use stat of first book - NRM */
-	int spell_stat = player->class->magic.total_spells ?
-		player->class->magic.books[0].realm->stat : 0;
-	bool caster = player->class->max_attacks < 5 ? true : false;
-	bool warrior = player->class->max_attacks > 5 ? true : false;
+	int spell_stat = player->playerClass->magic.total_spells ?
+		player->playerClass->magic.books[0].realm->stat : 0;
+	bool caster = player->playerClass->max_attacks < 5 ? true : false;
+	bool warrior = player->playerClass->max_attacks > 5 ? true : false;
 	int blows = 10;
 	int dex_break = 10;
 
@@ -982,21 +982,21 @@ void player_generate(struct player *p, const struct player_race *r,
 	int i;
 
 	if (!c)
-		c = p->class;
+		c = p->playerClass;
 	if (!r)
 		r = p->race;
 
-	p->class = c;
+	p->playerClass = c;
 	p->race = r;
 
 	/* Level 1 */
 	p->max_lev = p->lev = 1;
 
 	/* Experience factor */
-	p->expfact = p->race->r_exp + p->class->c_exp;
+	p->expfact = p->race->r_exp + p->playerClass->c_exp;
 
 	/* Hitdice */
-	p->hitdie = p->race->r_mhp + p->class->c_mhp;
+	p->hitdie = p->race->r_mhp + p->playerClass->c_mhp;
 
 	/* Pre-calculate level 1 hitdice */
 	p->player_hp[0] = p->hitdie;
